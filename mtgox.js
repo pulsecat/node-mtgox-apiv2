@@ -45,6 +45,7 @@ function MtGoxClient(key, secret, currency) {
   }
 
   function executeRequest(options, callback) {
+    options.timeout = 15000;
     if (typeof callback == "function") {
       request(options, function (err, res, body) {
         if (res && res.statusCode == 200) {
