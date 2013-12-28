@@ -1,6 +1,7 @@
 var querystring = require("querystring"),
   crypto = require("crypto"),
   request = require("request"),
+  microtime = require("microtime"),
   JSONStream = require("JSONStream");
 
 function MtGoxClient(key, secret, currency) {
@@ -23,7 +24,7 @@ function MtGoxClient(key, secret, currency) {
     }
 
     // generate a nonce
-    args.nonce = (new Date()).getTime() * 1000;
+    args.nonce = microtime.now();
     // compute the post data
     var postData = querystring.stringify(args);
     // append the path to the post data
@@ -53,6 +54,7 @@ function MtGoxClient(key, secret, currency) {
             console.log(err);
           }
         } else if(res){
+          // console.dir(res);
           callback(new Error("Request failed with " + res.statusCode));
         } else {
           callback(new Error("Request failed"));
@@ -112,12 +114,12 @@ function MtGoxClient(key, secret, currency) {
   };
 
   // price is an optional argument, if not used it must be set to null
-  self.add = function(type, amount, price, callback) {
+  self.add = function(type, amount_int, price_int, callback) {
     var args = {
       "type": type,
-      "amount": amount
+      "amount_int": amount_int
     };
-    if (price) args.price = price;
+    if (price_int) args.price_int = price_int;
     makeRequest(self._currency + "/money/order/add", args, callback);
   };
 
