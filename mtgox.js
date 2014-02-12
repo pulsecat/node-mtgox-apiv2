@@ -53,6 +53,7 @@ function MtGoxClient(key, secret, currency) {
             callback(null, JSON.parse(body));
           } catch(err) {
             console.log(err);
+            callback(err);
           }
         } else if(res){
           // console.dir(res);
